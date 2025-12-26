@@ -1,66 +1,86 @@
 import React from 'react';
-import { PageContainer } from '@ant-design/pro-components';
-import { Form, Input, Button, Checkbox, message } from 'antd';
+import {
+  PageContainer,
+  ProCard,
+  ProForm,
+  ProFormDatePicker,
+  ProFormSwitch,
+  ProFormText,
+  ProFormTextArea,
+} from '@ant-design/pro-components';
 import { history } from '@umijs/max';
+import { message } from 'antd';
 
 const ProjectFormCreate: React.FC = () => {
-  const [form] = Form.useForm();
-
-  const onFinish = (values: any) => {
-    // TODO: call API to save
+  const onFinish = async (values: any) => {
     console.log('Create form', values);
     message.success('Tạo biểu mẫu thành công (mock)');
     history.push('/project/forms');
+    return true;
   };
 
   return (
     <PageContainer title="Tạo biểu mẫu">
-      <Form form={form} layout="vertical" onFinish={onFinish} style={{ maxWidth: 800 }}>
-        <Form.Item name="tenBieuMau" label="Tên biểu mẫu" rules={[{ required: true, message: 'Vui lòng nhập tên biểu mẫu' }]}>
-          <Input />
-        </Form.Item>
+      <ProCard>
+        <ProForm
+          layout="vertical"
+          grid
+          colProps={{ span: 12 }}
+          onFinish={onFinish}
+          submitter={{
+            searchConfig: {
+              submitText: 'Tạo',
+              resetText: 'Huỷ',
+            },
+            resetButtonProps: {
+              onClick: (e) => {
+                e.preventDefault();
+                history.push('/project/forms');
+              },
+            },
+          }}
+        >
+          <ProFormText
+            name="tenBieuMau"
+            label="Tên biểu mẫu"
+            rules={[{ required: true, message: 'Vui lòng nhập tên biểu mẫu' }]}
+            colProps={{ span: 24 }}
+          />
 
-        <Form.Item name="loaiBieuMau" label="Loại biểu mẫu">
-          <Input />
-        </Form.Item>
+          <ProFormText name="loaiBieuMau" label="Loại biểu mẫu" />
+          <ProFormText name="duAn" label="Dự án" />
 
-        <Form.Item name="duAn" label="Dự án">
-          <Input />
-        </Form.Item>
+          <ProFormTextArea
+            name="dienGiai"
+            label="Diễn giải"
+            fieldProps={{ rows: 4 }}
+            colProps={{ span: 24 }}
+          />
 
-        <Form.Item name="dienGiai" label="Diễn giải">
-          <Input.TextArea rows={4} />
-        </Form.Item>
+          <ProFormSwitch
+            name="khoa"
+            label="Khóa"
+            fieldProps={{
+              checkedChildren: 'Khóa',
+              unCheckedChildren: 'Mở',
+            }}
+          />
 
-        <Form.Item name="khoa" valuePropName="checked">
-          <Checkbox>Khóa</Checkbox>
-        </Form.Item>
+          <ProFormText name="nvTao" label="Nhân viên tạo" />
+          <ProFormDatePicker
+            name="ngayTao"
+            label="Ngày tạo"
+            fieldProps={{ format: 'YYYY-MM-DD' }}
+          />
 
-        <Form.Item name="nvTao" label="Nhân viên tạo">
-          <Input />
-        </Form.Item>
-
-        <Form.Item name="ngayTao" label="Ngày tạo">
-          <Input placeholder="YYYY-MM-DD" />
-        </Form.Item>
-
-        <Form.Item name="nvCapNhat" label="Nhân viên cập nhật">
-          <Input />
-        </Form.Item>
-
-        <Form.Item name="ngayCapNhat" label="Ngày cập nhật">
-          <Input placeholder="YYYY-MM-DD" />
-        </Form.Item>
-
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Tạo
-          </Button>
-          <Button style={{ marginLeft: 8 }} onClick={() => history.push('/project/forms')}>
-            Huỷ
-          </Button>
-        </Form.Item>
-      </Form>
+          <ProFormText name="nvCapNhat" label="Nhân viên cập nhật" />
+          <ProFormDatePicker
+            name="ngayCapNhat"
+            label="Ngày cập nhật"
+            fieldProps={{ format: 'YYYY-MM-DD' }}
+          />
+        </ProForm>
+      </ProCard>
     </PageContainer>
   );
 };

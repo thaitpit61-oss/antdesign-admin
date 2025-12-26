@@ -1,72 +1,128 @@
-import React from 'react';
-import { PageContainer } from '@ant-design/pro-components';
-import { Form, Input, Button, message, InputNumber, Checkbox } from 'antd';
-import { history } from '@umijs/max';
+import {
+  PageContainer,
+  ProCard,
+  ProForm,
+  ProFormDatePicker,
+  ProFormDigit,
+  ProFormSwitch,
+  ProFormText,
+  ProFormTextArea,
+} from "@ant-design/pro-components";
+import { history } from "@umijs/max";
+import { message } from "antd";
+import React from "react";
 
 const ProjectCreate: React.FC = () => {
-  const [form] = Form.useForm();
-
   const onFinish = async (values: any) => {
-    // Đây chỉ là mock — bạn có thể gọi API ở đây
-    console.log('Create project', values);
-    message.success('Tạo dự án thành công');
-    history.push('/project/list');
+    console.log("Create project", values);
+    message.success("Tạo dự án thành công");
+    history.push("/project/list");
+    return true;
   };
 
   return (
     <PageContainer title="Tạo dự án">
-      <Form form={form} layout="vertical" onFinish={onFinish} style={{ maxWidth: 800 }}>
-        <Form.Item name="ngay" label="Ngày">
-          <Input placeholder="YYYY-MM-DD" />
-        </Form.Item>
-        <Form.Item name="code" label="Mã">
-          <Input />
-        </Form.Item>
-        <Form.Item name="maFast" label="Mã Fast">
-          <Input />
-        </Form.Item>
-        <Form.Item name="tenDuAn" label="Tên dự án" rules={[{ required: true }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="loaiDuAn" label="Loại dự án">
-          <Input />
-        </Form.Item>
-        <Form.Item name="nhanVien" label="Nhân viên">
-          <Input />
-        </Form.Item>
-        <Form.Item name="dienTich" label="Diện tích">
-          <Input />
-        </Form.Item>
-        <Form.Item name="soGiayPhep" label="Số giấy phép">
-          <Input />
-        </Form.Item>
-        <Form.Item name="ngayCap" label="Ngày cấp">
-          <Input placeholder="YYYY-MM-DD" />
-        </Form.Item>
-        <Form.Item name="donGia" label="Đơn giá">
-          <Input />
-        </Form.Item>
-        <Form.Item name="soLuong" label="Số lượng">
-          <InputNumber style={{ width: '100%' }} />
-        </Form.Item>
-        <Form.Item name="diaChi" label="Địa chỉ">
-          <Input />
-        </Form.Item>
-        <Form.Item name="ngayDuyet" label="Ngày duyệt">
-          <Input placeholder="YYYY-MM-DD" />
-        </Form.Item>
-        <Form.Item name="nguoiDuyet" label="Người duyệt">
-          <Input />
-        </Form.Item>
-        <Form.Item name="daDuyet" valuePropName="checked">
-          <Checkbox>Đã duyệt</Checkbox>
-        </Form.Item>
+      <ProCard>
+        <ProForm
+          layout="vertical"
+          grid
+          colProps={{ span: 12 }}
+          onFinish={onFinish}
+          submitter={{
+            searchConfig: {
+              submitText: "Tạo",
+              resetText: "Huỷ",
+            },
+            resetButtonProps: {
+              onClick: (e) => {
+                e.preventDefault();
+                history.push("/project/list");
+              },
+            },
+          }}
+        >
+          {/* Ngày */}
+          <ProFormDatePicker
+            name="ngay"
+            label="Ngày"
+            fieldProps={{ format: "YYYY-MM-DD" }}
+          />
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit">Tạo</Button>
-          <Button style={{ marginLeft: 8 }} onClick={() => history.push('/project/list')}>Huỷ</Button>
-        </Form.Item>
-      </Form>
+          <ProFormText name="code" label="Mã" />
+          <ProFormText name="maFast" label="Mã Fast" />
+
+          <ProFormText
+            name="tenDuAn"
+            label="Tên dự án"
+            rules={[{ required: true, message: "Vui lòng nhập tên dự án" }]}
+          />
+
+          <ProFormText name="loaiDuAn" label="Loại dự án" />
+          <ProFormText name="nhanVien" label="Nhân viên" />
+
+          {/* Nếu diện tích là số -> dùng Digit (đỡ nhập linh tinh) */}
+          <ProFormDigit
+            name="dienTich"
+            label="Diện tích"
+            min={0}
+            fieldProps={{ precision: 2 }}
+          />
+
+          <ProFormText name="soGiayPhep" label="Số giấy phép" />
+
+          <ProFormDatePicker
+            name="ngayCap"
+            label="Ngày cấp"
+            fieldProps={{ format: "YYYY-MM-DD" }}
+          />
+
+          <ProFormDatePicker
+            name="ngayDuyet"
+            label="Ngày duyệt"
+            fieldProps={{ format: "YYYY-MM-DD" }}
+          />
+
+          {/* Nếu đơn giá là số -> Digit + format nghìn */}
+          <ProFormDigit
+            name="donGia"
+            label="Đơn giá"
+            min={0}
+            fieldProps={{
+              precision: 0,
+              formatter: (v) =>
+                v ? `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "",
+              parser: (v) => Number((v || "").replace(/,/g, "")),
+            }}
+          />
+
+          <ProFormDigit
+            name="soLuong"
+            label="Số lượng"
+            min={0}
+            fieldProps={{ precision: 0 }}
+          />
+
+          <ProFormText name="nguoiDuyet" label="Người duyệt" />
+
+          {/* Địa chỉ thường dài hơn -> full width cho dễ nhìn */}
+          <ProFormTextArea
+            name="diaChi"
+            label="Địa chỉ"
+            colProps={{ span: 24 }}
+            fieldProps={{ rows: 2 }}
+          />
+
+          {/* Checkbox -> Switch nhìn “pro” hơn */}
+          <ProFormSwitch
+            name="daDuyet"
+            label="Đã duyệt"
+            fieldProps={{
+              checkedChildren: "Đã duyệt",
+              unCheckedChildren: "Chưa duyệt",
+            }}
+          />
+        </ProForm>
+      </ProCard>
     </PageContainer>
   );
 };

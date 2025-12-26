@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { PageContainer } from '@ant-design/pro-components';
-import { Table, Button, Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { PageContainer, ProTable } from '@ant-design/pro-components';
+import type { ProColumns } from '@ant-design/pro-components';
+import { Button, Tag } from 'antd';
 import { history } from '@umijs/max';
 
 type ProjectForm = {
@@ -45,33 +45,62 @@ const ProjectForms: React.FC = () => {
     },
   ]);
 
-  const columns: ColumnsType<ProjectForm> = useMemo(
+  const columns: ProColumns<ProjectForm>[] = useMemo(
     () => [
-      { title: 'ID', dataIndex: 'id', key: 'id' },
-      { title: 'Tên biểu mẫu', dataIndex: 'tenBieuMau', key: 'tenBieuMau' },
-      { title: 'Loại biểu mẫu', dataIndex: 'loaiBieuMau', key: 'loaiBieuMau' },
-      { title: 'Dự án', dataIndex: 'duAn', key: 'duAn' },
-      { title: 'Diễn giải', dataIndex: 'dienGiai', key: 'dienGiai' },
+      { title: 'ID', dataIndex: 'id', search: false, width: 70, fixed: 'left' },
+
+      { title: 'Tên biểu mẫu', dataIndex: 'tenBieuMau', ellipsis: true, width: 200 },
+
       {
-        title: 'Khóa',
-        dataIndex: 'khoa',
-        key: 'khoa',
-        render: (val: boolean) => <Tag color={val ? 'red' : 'green'}>{val ? 'Khóa' : 'Hoạt động'}</Tag>,
+        title: 'Loại biểu mẫu',
+        dataIndex: 'loaiBieuMau',
+        ellipsis: true,
+        width: 200,
       },
-      { title: 'Nhân viên tạo', dataIndex: 'nvTao', key: 'nvTao' },
-      { title: 'Ngày tạo', dataIndex: 'ngayTao', key: 'ngayTao' },
-      { title: 'Nhân viên cập nhật', dataIndex: 'nvCapNhat', key: 'nvCapNhat' },
-      { title: 'Ngày cập nhật', dataIndex: 'ngayCapNhat', key: 'ngayCapNhat' },
+
+      {
+        title: 'Dự án',
+        dataIndex: 'duAn',
+        valueType: 'select',
+        width: 160,
+        valueEnum: {
+          'Dự án A': { text: 'Dự án A' },
+          'Dự án B': { text: 'Dự án B' },
+        },
+      },
+
+      { title: 'Diễn giải', dataIndex: 'dienGiai', search: false, ellipsis: true, width: 220 },
+
+      {
+        title: 'Trạng thái',
+        dataIndex: 'khoa',
+        valueType: 'select',
+        width: 130,
+        valueEnum: {
+          false: { text: 'Hoạt động' },
+          true: { text: 'Khóa' },
+        },
+        render: (_, record) => (
+          <Tag color={record.khoa ? 'red' : 'green'}>{record.khoa ? 'Khóa' : 'Hoạt động'}</Tag>
+        ),
+      },
+
+      { title: 'Nhân viên tạo', dataIndex: 'nvTao', width: 160 },
+      { title: 'Ngày tạo', dataIndex: 'ngayTao', valueType: 'date', search: false, width: 120 },
+
+      { title: 'Nhân viên cập nhật', dataIndex: 'nvCapNhat', width: 170 },
+      { title: 'Ngày cập nhật', dataIndex: 'ngayCapNhat', valueType: 'date', search: false, width: 140 },
+
       {
         title: 'Hành động',
-        key: 'action',
-        render: (_: any, record: ProjectForm) => (
-          <>
-            <Button type="link" onClick={() => history.push(`/project/forms/${record.id}`)}>
-              Xem
-            </Button>
-          </>
-        ),
+        valueType: 'option',
+        width: 120,
+        fixed: 'right',
+        render: (_, record) => [
+          <a key="view" onClick={() => history.push(`/project/forms/${record.id}`)}>
+            Xem
+          </a>,
+        ],
       },
     ],
     [],
@@ -79,12 +108,19 @@ const ProjectForms: React.FC = () => {
 
   return (
     <PageContainer title="Biểu mẫu">
-      <div style={{ marginBottom: 16 }}>
-        <Button type="primary" onClick={() => history.push('/project/forms/create')}>
-          Tạo biểu mẫu
-        </Button>
-      </div>
-      <Table<ProjectForm> rowKey="id" columns={columns} dataSource={data} />
+      <ProTable<ProjectForm>
+        rowKey="id"
+        columns={columns}
+        dataSource={data}
+        search={{ labelWidth: 'auto' }}
+        pagination={{ pageSize: 10 }}
+        scroll={{ x: 1200 }}
+        toolBarRender={() => [
+          <Button key="create" type="primary" onClick={() => history.push('/project/forms/create')}>
+            Tạo biểu mẫu
+          </Button>,
+        ]}
+      />
     </PageContainer>
   );
 };

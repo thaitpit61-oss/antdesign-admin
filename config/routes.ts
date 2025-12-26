@@ -88,8 +88,8 @@ export default [
         component: "./project/list",
       },
       {
-        name: "Thêm dự án",
-        icon: "smile",
+        // name: "Thêm dự án",
+        // icon: "smile",
         path: "/project/create",
         component: "./project/create",
       },
@@ -116,8 +116,8 @@ export default [
         component: "./project/forms",
       },
       {
-        name: "Tạo biểu mẫu",
-        icon: "smile",
+        // name: "Tạo biểu mẫu",
+        // icon: "smile",
         path: "/project/forms/create",
         component: "./project/forms/create",
       },
@@ -143,8 +143,8 @@ export default [
         component: "./product/detail",
       },
       {
-        name: "Thêm sản phẩm",
-        icon: "smile",
+        // name: "Thêm sản phẩm",
+        // icon: "smile",
         path: "/product/create",
         component: "./product/create",
       },
@@ -155,8 +155,8 @@ export default [
         component: "./product/sale",
       },
       {
-        name: "Thêm đợt mở bán",
-        icon: "smile",
+        // name: "Thêm đợt mở bán",
+        // icon: "smile",
         path: "/product/sale/create-sale",
         component: "./product/sale/create-sale",
       },
