@@ -94,6 +94,10 @@ export default [
         component: "./project/create",
       },
       {
+        path: "/project/:id",
+        component: "./project/detail",
+      },
+      {
         name: "Chương trình khuyến mãi",
         icon: "smile",
         path: "/project/promotions",
@@ -111,6 +115,12 @@ export default [
         path: "/project/forms",
         component: "./project/forms",
       },
+      {
+        name: "Tạo biểu mẫu",
+        icon: "smile",
+        path: "/project/forms/create",
+        component: "./project/forms/create",
+      },
     ],
   },
   {
@@ -127,6 +137,10 @@ export default [
         icon: "smile",
         path: "/product/list",
         component: "./product/list",
+      },
+      {
+        path: "/product/:maCan",
+        component: "./product/detail",
       },
       {
         name: "Thêm sản phẩm",
