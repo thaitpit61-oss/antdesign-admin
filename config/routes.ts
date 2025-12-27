@@ -88,8 +88,6 @@ export default [
         component: "./project/list",
       },
       {
-        // name: "Thêm dự án",
-        // icon: "smile",
         path: "/project/create",
         component: "./project/create",
       },
@@ -109,6 +107,44 @@ export default [
         path: "/project/payment-schedule",
         component: "./project/payment-schedule",
       },
+
+      ///////////////////// Project routes /////////////////////
+      // Edit project route
+      {
+        path: "/project/:id/edit",
+        component: "./project/project-edit",
+      },
+      // Create promotion route
+      {
+        path: "/project/promotions/create",
+        component: "./project/promotions/create",
+      },
+      // Edit promotion route
+      {
+        path: "/project/promotions/:id/edit",
+        component: "./project/promotions/edit",
+      },
+      // Detail payment-schedule route
+      {
+        path: "/project/payment-schedule/:id",
+        component: "./project/payment-schedule/detail",
+      },
+      // Create payment-schedule route
+      {
+        path: "/project/payment-schedule/create",
+        component: "./project/payment-schedule/create",
+      },
+      // Edit payment-schedule route
+      {
+        path: "/project/payment-schedule/:id/edit",
+        component: "./project/payment-schedule/edit",
+      },
+      // Detail payment-schedule route
+      {
+        path: "/project/payment-schedule/:id",
+        component: "./project/payment-schedule/detail",
+      },
+      // Detail form route
       {
         name: "Biểu mẫu",
         icon: "smile",
@@ -116,10 +152,18 @@ export default [
         component: "./project/forms",
       },
       {
-        // name: "Tạo biểu mẫu",
-        // icon: "smile",
         path: "/project/forms/create",
         component: "./project/forms/create",
+      },
+      // Edit form route
+      {
+        path: "/project/forms/:id/edit",
+        component: "./project/forms/edit",
+      },
+      // Detail form route
+      {
+        path: "/project/forms/:id",
+        component: "./project/forms/detail",
       },
     ],
   },
@@ -143,10 +187,17 @@ export default [
         component: "./product/detail",
       },
       {
-        // name: "Thêm sản phẩm",
-        // icon: "smile",
         path: "/product/create",
         component: "./product/create",
+      },
+      {
+        path: "/product/:maCan",
+        component: "./product/detail",
+      },
+      // Edit product route
+      {
+        path: "/product/:maCan/edit",
+        component: "./product/edit",
       },
       {
         name: "Đợt mở bán ",
@@ -155,10 +206,16 @@ export default [
         component: "./product/sale",
       },
       {
-        // name: "Thêm đợt mở bán",
-        // icon: "smile",
         path: "/product/sale/create-sale",
         component: "./product/sale/create-sale",
+      },
+      {
+        path: "/product/sale/:id/edit",
+        component: "./product/sale/edit",
+      },
+      {
+        path: "/product/sale/:id",
+        component: "./product/sale/detail",
       },
     ],
   },

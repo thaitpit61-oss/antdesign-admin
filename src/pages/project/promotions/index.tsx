@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { PageContainer } from '@ant-design/pro-components';
-import { Table, Button } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { PageContainer, ProTable } from '@ant-design/pro-components';
+import type { ProColumns } from '@ant-design/pro-components';
+import { Button } from 'antd';
 import { history } from '@umijs/max';
 
 type Promotion = {
@@ -54,31 +54,50 @@ const Promotions: React.FC = () => {
     },
   ]);
 
-  const columns: ColumnsType<Promotion> = useMemo(
+  const columns: ProColumns<Promotion>[] = useMemo(
     () => [
-      { title: 'ID', dataIndex: 'id', key: 'id' },
-      { title: 'Dự án', dataIndex: 'duAn', key: 'duAn' },
-      { title: 'Tên chương trình', dataIndex: 'tenChuongTrinh', key: 'tenChuongTrinh' },
-      { title: 'Quà tặng', dataIndex: 'tenQuaTang', key: 'tenQuaTang' },
-      { title: 'Kế hoạch bán hàng', dataIndex: 'keHoachBanHang', key: 'keHoachBanHang' },
-      { title: 'Từ ngày', dataIndex: 'tuNGay', key: 'tuNGay' },
-      { title: 'Đến ngày', dataIndex: 'denNgay', key: 'denNgay' },
-      { title: 'Tỷ lệ', dataIndex: 'tyLe', key: 'tyLe' },
-      { title: 'Tiền mặt', dataIndex: 'tienMat', key: 'tienMat' },
-      { title: 'Nhân viên tạo', dataIndex: 'nhanVienTao', key: 'nhanVienTao' },
-      { title: 'Ngày tạo', dataIndex: 'ngayTao', key: 'ngayTao' },
-      { title: 'Nhân viên cập nhật', dataIndex: 'nhanVienCapNhat', key: 'nhanVienCapNhat' },
-      { title: 'Ngày cập nhật', dataIndex: 'ngayCapNhat', key: 'ngayCapNhat' },
+      { title: 'ID', dataIndex: 'id', search: false, width: 70, fixed: 'left' },
+
+      {
+        title: 'Dự án',
+        dataIndex: 'duAn',
+        valueType: 'select',
+        width: 150,
+        valueEnum: {
+          'Dự án A': { text: 'Dự án A' },
+          'Dự án B': { text: 'Dự án B' },
+        },
+      },
+
+      { title: 'Tên chương trình', dataIndex: 'tenChuongTrinh', width: 200, ellipsis: true },
+      { title: 'Quà tặng', dataIndex: 'tenQuaTang', width: 160, ellipsis: true },
+      { title: 'Kế hoạch bán hàng', dataIndex: 'keHoachBanHang', search: false, width: 220, ellipsis: true },
+
+      { title: 'Từ ngày', dataIndex: 'tuNGay', valueType: 'date', search: false, width: 120 },
+      { title: 'Đến ngày', dataIndex: 'denNgay', valueType: 'date', search: false, width: 120 },
+
+      { title: 'Tỷ lệ', dataIndex: 'tyLe', search: false, width: 90 },
+      { title: 'Tiền mặt', dataIndex: 'tienMat', search: false, width: 110 },
+
+      { title: 'Nhân viên tạo', dataIndex: 'nhanVienTao', width: 160 },
+      { title: 'Ngày tạo', dataIndex: 'ngayTao', valueType: 'date', search: false, width: 120 },
+
+      { title: 'Nhân viên cập nhật', dataIndex: 'nhanVienCapNhat', width: 180 },
+      { title: 'Ngày cập nhật', dataIndex: 'ngayCapNhat', valueType: 'date', search: false, width: 140 },
+
       {
         title: 'Hành động',
-        key: 'action',
-        render: (_: any, record: Promotion) => (
-          <>
-            <Button type="link" onClick={() => history.push(`/project/promotions/${record.id}`)}>
-              Xem
-            </Button>
-          </>
-        ),
+        valueType: 'option',
+        fixed: 'right',
+        width: 120,
+        render: (_, record) => [
+          <a key="view" onClick={() => history.push(`/project/promotions/${record.id}`)}>
+            Xem
+          </a>,
+          <a key="edit" onClick={() => history.push(`/project/promotions/${record.id}/edit`)}>
+            Sửa
+          </a>,
+        ],
       },
     ],
     [],
@@ -86,12 +105,19 @@ const Promotions: React.FC = () => {
 
   return (
     <PageContainer title="Chương trình khuyến mãi">
-      <div style={{ marginBottom: 16 }}>
-        <Button type="primary" onClick={() => history.push('/project/promotions/create')}>
-          Tạo chương trình
-        </Button>
-      </div>
-      <Table<Promotion> rowKey="id" columns={columns} dataSource={data} />
+      <ProTable<Promotion>
+        rowKey="id"
+        columns={columns}
+        dataSource={data}
+        search={{ labelWidth: 'auto' }}
+        pagination={{ pageSize: 10 }}
+        scroll={{ x: 1400 }}
+        toolBarRender={() => [
+          <Button key="create" type="primary" onClick={() => history.push('/project/promotions/create')}>
+            Tạo chương trình
+          </Button>,
+        ]}
+      />
     </PageContainer>
   );
 };
