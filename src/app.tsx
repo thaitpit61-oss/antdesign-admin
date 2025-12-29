@@ -1,9 +1,6 @@
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
-import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
-import { history, Link } from '@umijs/max';
-import React from 'react';
 import {
   AvatarDropdown,
   AvatarName,
@@ -12,9 +9,11 @@ import {
   SelectLang,
 } from '@/components';
 import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
+import '@ant-design/v5-patch-for-react-19';
+import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
+import { history, Link } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
-import '@ant-design/v5-patch-for-react-19';
 
 const isDev = process.env.NODE_ENV === 'development' || process.env.CI;
 const loginPath = '/user/login';
@@ -65,10 +64,17 @@ export const layout: RunTimeLayoutConfig = ({
   setInitialState,
 }) => {
   return {
-    actionsRender: () => [
-      <Question key="doc" />,
-      <SelectLang key="SelectLang" />,
-    ],
+    headerContentRender: () => (
+      <div className="w-full hidden md:flex justify-center">
+        <div className="font-semibold text-base text-center truncate max-w-[60vw] uppercase text-[#0C4CA3]">
+          Tập đoàn bcons - công ty cổ phần và đầu tư xây dựng bcons
+        </div>
+      </div>
+    ),
+    // actionsRender: () => [
+    //   <Question key="doc" />,
+    //   <SelectLang key="SelectLang" />,
+    // ],
     avatarProps: {
       src: initialState?.currentUser?.avatar,
       title: <AvatarName />,

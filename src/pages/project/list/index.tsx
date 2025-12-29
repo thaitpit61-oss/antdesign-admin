@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from 'react';
-import { PageContainer, ProTable } from '@ant-design/pro-components';
+import { EditOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
-import { Button, Tag } from 'antd';
+import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
+import { Button, message, Switch, Tag, Tooltip } from 'antd';
+import React, { useMemo, useState } from 'react';
 
 type Project = {
   id: number;
@@ -21,6 +22,9 @@ type Project = {
   ngayDuyet: string;
   nguoiDuyet: string;
   daDuyet: boolean;
+
+  // ✅ thêm status
+  status: boolean;
 };
 
 const toNumber = (v: any) => {
@@ -48,6 +52,8 @@ const ProjectList: React.FC = () => {
       ngayDuyet: '2024-12-15',
       nguoiDuyet: 'Ban QL',
       daDuyet: true,
+
+      status: true,
     },
     {
       id: 2,
@@ -66,6 +72,8 @@ const ProjectList: React.FC = () => {
       ngayDuyet: '2024-11-30',
       nguoiDuyet: 'BGĐ',
       daDuyet: false,
+
+      status: false,
     },
   ]);
 
@@ -140,22 +148,54 @@ const ProjectList: React.FC = () => {
         ),
       },
 
-      { title: 'Ngày', dataIndex: 'ngay', valueType: 'date', search: false, width: 120 },
-      { title: 'Ngày duyệt', dataIndex: 'ngayDuyet', valueType: 'date', search: false, width: 120 },
+      {
+        title: 'Ngày',
+        dataIndex: 'ngay',
+        valueType: 'date',
+        search: false,
+        width: 120,
+      },
+      {
+        title: 'Ngày duyệt',
+        dataIndex: 'ngayDuyet',
+        valueType: 'date',
+        search: false,
+        width: 120,
+      },
+
+      // ✅ Status (Switch UI mẫu: không lưu)
+      {
+        title: 'Status',
+        dataIndex: 'status',
+        width: 140,
+        fixed: 'right',
+        search: false, // demo UI thôi
+        render: (_, record) => (
+          <Switch
+            defaultChecked={record.status}
+            checkedChildren="ON"
+            unCheckedChildren="OFF"
+            onChange={(checked) => {
+              message.info(
+                `Demo status: ${checked ? 'Đang hoạt động' : 'Tạm dừng'}`,
+              );
+            }}
+          />
+        ),
+      },
 
       {
         title: 'Hành động',
         valueType: 'option',
-        width: 140,
+        width: 80,
         fixed: 'right',
-        render: (_, record) => [
-          <a key="view" onClick={() => history.push(`/project/${record.id}`)}>
-            Xem
-          </a>,
-          <a key="edit" onClick={() => history.push(`/project/${record.id}/edit`)}>
-            Sửa
-          </a>,
-        ],
+        render: (_, record) => (
+          <Tooltip title="Chỉnh sửa">
+            <a onClick={() => history.push(`/project/${record.id}/edit`)}>
+              <EditOutlined style={{ color: '#1677ff', fontSize: 16 }} />
+            </a>
+          </Tooltip>
+        ),
       },
     ],
     [],
@@ -169,10 +209,14 @@ const ProjectList: React.FC = () => {
         dataSource={data}
         search={{ labelWidth: 'auto' }}
         pagination={{ pageSize: 10 }}
-        scroll={{ x: 1200 }}
+        scroll={{ x: 1350 }}
         rowSelection={{}}
         toolBarRender={() => [
-          <Button key="create" type="primary" onClick={() => history.push('/project/create')}>
+          <Button
+            key="create"
+            type="primary"
+            onClick={() => history.push('/project/create')}
+          >
             Tạo dự án mới
           </Button>,
         ]}
